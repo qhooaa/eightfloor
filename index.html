@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에이트플로어 — Reward Tech · AdTech · Platform Design</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08090e;
+  --surface: #0f1018;
+  --border: #1c1d2a;
+  --text: #b0b4c8;
+  --text-dim: #5c6080;
+  --heading: #e8eaf0;
+  --accent: #7c9cf8;
+  --accent-dim: rgba(124,156,248,0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard', sans-serif;
+  background: var(--bg); color: var(--text);
+  line-height: 1.75; overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 64px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(24px, 5vw, 64px);
+  background: rgba(8,9,14,0.9); backdrop-filter: blur(16px);
+}
+.nav-logo {
+  font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700;
+  color: var(--heading); text-decoration: none;
+}
+.nav-logo span { font-weight: 400; color: var(--text-dim); }
+.nav-right { display: flex; align-items: center; gap: 32px; }
+.nav-right a {
+  font-size: 13px; color: var(--text-dim); text-decoration: none; transition: color 0.3s;
+}
+.nav-right a:hover { color: var(--heading); }
+.nav-right .cta {
+  padding: 7px 20px; border: 1px solid var(--border); border-radius: 6px;
+  color: var(--heading) !important; transition: all 0.3s;
+}
+.nav-right .cta:hover { background: var(--heading); color: var(--bg) !important; }
+.nav-mobile { display: none; background: none; border: none; color: var(--heading); font-size: 20px; cursor: pointer; }
+
+/* LAYOUT */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 64px); }
+.spacer { height: clamp(100px, 15vh, 160px); }
+.spacer-sm { height: clamp(60px, 8vh, 100px); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; align-items: flex-end;
+  padding-bottom: clamp(80px, 12vh, 140px); padding-top: 100px;
+}
+.hero-inner { width: 100%; }
+.hero-over {
+  font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 500;
+  color: var(--accent); letter-spacing: 5px; text-transform: uppercase;
+  margin-bottom: 28px; opacity: 0; animation: in 0.8s 0.3s forwards;
+}
+.hero-h {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(32px, 5vw, 64px); font-weight: 800;
+  color: var(--heading); line-height: 1.15; letter-spacing: -1.5px;
+  margin-bottom: 32px; max-width: 820px;
+  opacity: 0; animation: in 0.8s 0.5s forwards;
+}
+.hero-h em { font-style: normal; color: var(--accent); }
+.hero-p {
+  font-size: 17px; font-weight: 300; color: var(--text-dim);
+  line-height: 1.9; max-width: 520px; margin-bottom: 40px;
+  opacity: 0; animation: in 0.8s 0.7s forwards;
+}
+.hero-row {
+  display: flex; gap: 12px;
+  opacity: 0; animation: in 0.8s 0.9s forwards;
+}
+.pill {
+  padding: 12px 28px; border-radius: 6px; font-size: 14px; font-weight: 500;
+  text-decoration: none; transition: all 0.3s; cursor: pointer;
+}
+.pill-fill { background: var(--accent); color: #fff; border: none; }
+.pill-fill:hover { filter: brightness(1.15); transform: translateY(-1px); }
+.pill-line { background: none; color: var(--text); border: 1px solid var(--border); }
+.pill-line:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ABOUT — EDITORIAL SPLIT */
+.ed-split {
+  display: grid; grid-template-columns: 1fr 360px; gap: 80px; align-items: start;
+}
+.ed-tag {
+  font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 500;
+  color: var(--accent); letter-spacing: 4px; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.ed-h {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(24px, 3vw, 40px); font-weight: 700;
+  color: var(--heading); line-height: 1.3; letter-spacing: -0.8px;
+  margin-bottom: 24px;
+}
+.ed-body { font-size: 15px; color: var(--text); line-height: 2; }
+.ed-body p { margin-bottom: 16px; }
+
+.info-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 28px; margin-top: 8px;
+}
+.info-r {
+  display: flex; justify-content: space-between; padding: 12px 0;
+  border-bottom: 1px solid var(--border); font-size: 13px;
+}
+.info-r:last-child { border-bottom: none; }
+.info-r .l { color: var(--text-dim); }
+.info-r .v { color: var(--heading); font-weight: 500; }
+
+/* TRUST — MONO ROW */
+.mono-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+}
+.mono-cell {
+  padding: 36px 24px; border-right: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.mono-cell:last-child { border-right: none; }
+.mono-cell:hover { background: var(--accent-dim); }
+.mono-cell h4 {
+  font-size: 14px; font-weight: 600; color: var(--heading); margin-bottom: 8px;
+}
+.mono-cell p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+
+/* SERVICES — LIST */
+.svc-item {
+  display: grid; grid-template-columns: 140px 1fr; gap: 40px;
+  padding: 40px 0; border-top: 1px solid var(--border);
+}
+.svc-item:last-child { border-bottom: 1px solid var(--border); }
+.svc-idx {
+  font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 600;
+  color: var(--accent); letter-spacing: 2px;
+}
+.svc-title {
+  font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700;
+  color: var(--heading); margin-bottom: 6px; letter-spacing: -0.3px;
+}
+.svc-sub { font-size: 14px; color: var(--accent); margin-bottom: 14px; }
+.svc-desc { font-size: 14px; color: var(--text-dim); line-height: 1.9; margin-bottom: 14px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag-pill {
+  font-size: 11px; padding: 4px 12px; border: 1px solid var(--border);
+  border-radius: 4px; color: var(--text-dim);
+}
+
+/* VALUE — LARGE NUMBERS */
+.val-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+.val-i { }
+.val-i .num {
+  font-family: 'Sora', sans-serif; font-size: 56px; font-weight: 800;
+  color: var(--border); letter-spacing: -3px; line-height: 1;
+  transition: color 0.4s;
+}
+.val-i:hover .num { color: var(--accent); }
+.val-i h4 { font-size: 15px; font-weight: 600; color: var(--heading); margin: 12px 0 6px; }
+.val-i p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+
+/* PROCESS */
+.proc-wrap { max-width: 640px; }
+.proc-i {
+  display: flex; gap: 24px; padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+}
+.proc-i:last-child { border-bottom: none; }
+.proc-n {
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700;
+  color: var(--accent); min-width: 32px; padding-top: 2px;
+}
+.proc-i h4 { font-size: 15px; font-weight: 600; color: var(--heading); margin-bottom: 4px; }
+.proc-i p { font-size: 13px; color: var(--text-dim); line-height: 1.8; }
+
+/* PROJECTS — ASYMMETRIC */
+.proj-asym {
+  display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px;
+}
+.proj-c {
+  padding: 32px 28px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; transition: all 0.3s;
+}
+.proj-c:hover { border-color: rgba(124,156,248,0.25); }
+.proj-c h4 { font-size: 15px; font-weight: 600; color: var(--heading); margin-bottom: 6px; }
+.proj-c p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+
+/* WHY */
+.why-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.why-c {
+  padding: 36px 28px; border: 1px solid var(--border); border-radius: 14px;
+  transition: all 0.4s; background: var(--surface);
+}
+.why-c:hover { border-color: rgba(124,156,248,0.15); }
+.why-c .n {
+  font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 600;
+  color: var(--accent); letter-spacing: 2px; margin-bottom: 16px;
+}
+.why-c h4 { font-size: 16px; font-weight: 700; color: var(--heading); margin-bottom: 10px; }
+.why-c p { font-size: 13px; color: var(--text-dim); line-height: 1.8; }
+
+/* VISION — QUOTE */
+.vis-quote {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(18px, 2.5vw, 28px); font-weight: 300;
+  color: var(--text-dim); line-height: 1.8; max-width: 760px;
+  margin-top: 32px; padding-left: 28px;
+  border-left: 2px solid var(--accent);
+}
+.vis-quote strong { color: var(--heading); font-weight: 600; }
+
+/* CONTACT */
+.ct-center { text-align: center; }
+.ct-center .ed-body { max-width: 500px; margin: 0 auto 36px; text-align: center; }
+.ct-btns { display: flex; gap: 12px; justify-content: center; }
+.ct-block {
+  margin-top: 48px; display: inline-block; text-align: left;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 28px 36px;
+}
+
+/* FOOTER */
+footer { padding: 40px; text-align: center; border-top: 1px solid var(--border); margin-top: 40px; }
+footer p { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; }
+
+/* ANIM */
+@keyframes in {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rv {
+  opacity: 0; transform: translateY(28px);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rv.vis { opacity: 1; transform: translateY(0); }
+.rv-d1 { transition-delay: 0.15s; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .ed-split { grid-template-columns: 1fr; gap: 32px; }
+  .mono-row { grid-template-columns: 1fr 1fr; }
+  .mono-cell { border-bottom: 1px solid var(--border); }
+  .svc-item { grid-template-columns: 1fr; gap: 12px; }
+  .val-row { grid-template-columns: 1fr 1fr; }
+  .proj-asym { grid-template-columns: 1fr; }
+  .why-cols { grid-template-columns: 1fr; }
+  .nav-right { display: none; }
+  .nav-mobile { display: block; }
+  .hero-row, .ct-btns { flex-direction: column; }
+  .hero-row a, .ct-btns a { text-align: center; }
+}
+@media (max-width: 600px) {
+  .mono-row, .val-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">eightfloor<span>.co</span></a>
+  <div class="nav-right">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#process">Process</a>
+    <a href="#contact" class="cta">Contact</a>
+  </div>
+  <button class="nav-mobile" onclick="document.querySelector('.nav-right').classList.toggle('show')">☰</button>
+</nav>
+
+<!-- HERO -->
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-over">Reward Tech · AdTech · Platform Design</div>
+      <h1 class="hero-h">리워드와 광고,<br>사용자 행동을 <em>연결하는<br>플랫폼 설계</em> 회사</h1>
+      <p class="hero-p">유저 유입부터 참여, 전환, 보상, 재방문까지 이어지는 흐름 전체를 설계합니다. 단순한 광고 운영이 아니라 구조를 만듭니다.</p>
+      <div class="hero-row">
+        <a href="#about" class="pill pill-line">회사 소개 보기</a>
+        <a href="#contact" class="pill pill-fill">사업 문의하기</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- ABOUT -->
+  <div id="about">
+    <div class="ed-split rv">
+      <div>
+        <div class="ed-tag">About</div>
+        <h2 class="ed-h">광고가 작동하는 구조를<br>설계합니다</h2>
+        <div class="ed-body">
+          <p>광고는 더 이상 노출만으로 끝나지 않습니다. 사용자는 왜 클릭하는지, 무엇에 반응하는지, 어떤 보상이 행동을 바꾸는지가 더 중요해졌습니다.</p>
+          <p>에이트플로어는 이 흐름을 캠페인 단위가 아니라 플랫폼 구조와 수익 모델의 관점에서 설계합니다. 리워드 기반 참여 구조, 광고 연동 방식, API 기반 확장, 제휴 모델 설계까지 실행 가능한 형태로 정리하는 것이 우리의 역할입니다.</p>
+        </div>
+      </div>
+      <div class="info-box rv-d1">
+        <div class="info-r"><span class="l">회사명</span><span class="v">에이트플로어</span></div>
+        <div class="info-r"><span class="l">주요 사업</span><span class="v">리워드 테크 / 애드테크 / 플랫폼 설계</span></div>
+        <div class="info-r"><span class="l">대표</span><span class="v">—</span></div>
+        <div class="info-r"><span class="l">설립연도</span><span class="v">—</span></div>
+        <div class="info-r"><span class="l">본사</span><span class="v">—</span></div>
+        <div class="info-r"><span class="l">이메일</span><span class="v">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- TRUST -->
+  <div id="trust">
+    <div class="rv">
+      <div class="ed-tag">Core Strengths</div>
+      <h2 class="ed-h">기능보다 흐름을 먼저 봅니다</h2>
+    </div>
+    <div class="spacer-sm"></div>
+    <div class="mono-row rv">
+      <div class="mono-cell"><h4>구조 중심 설계</h4><p>기능 나열보다 서비스가 실제로 어떻게 작동하는지 먼저 봅니다.</p></div>
+      <div class="mono-cell"><h4>통합 관점</h4><p>광고와 보상, 사용자 경험과 수익 구조를 따로 보지 않습니다.</p></div>
+      <div class="mono-cell"><h4>실행 가능한 모델</h4><p>좋아 보이는 아이디어보다 실제 운영 가능한 구조를 중요하게 생각합니다.</p></div>
+      <div class="mono-cell"><h4>MVP → 확장</h4><p>초기 실행과 장기 확장을 분리하지 않고 함께 설계합니다.</p></div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- SERVICES -->
+  <div id="services">
+    <div class="rv">
+      <div class="ed-tag">Services</div>
+      <h2 class="ed-h">사업 영역</h2>
+    </div>
+    <div class="spacer-sm"></div>
+    <div class="svc-item rv"><div class="svc-idx">01 —</div><div><div class="svc-title">Reward Tech</div><div class="svc-sub">사용자의 행동을 유도하는 보상 구조 설계</div><p class="svc-desc">리워드는 단순한 혜택 제공이 아니라, 서비스 안에서 사용자의 행동을 설계하는 중요한 장치입니다.</p><div class="tags"><span class="tag-pill">캠페인 구조</span><span class="tag-pill">보상 정책</span><span class="tag-pill">액션 기반 플로우</span><span class="tag-pill">성과 연동</span></div></div></div>
+    <div class="svc-item rv"><div class="svc-idx">02 —</div><div><div class="svc-title">AdTech</div><div class="svc-sub">광고가 실제 성과로 이어지는 구조 설계</div><p class="svc-desc">광고는 많이 보여주는 것이 아니라 잘 반응하게 만드는 것이 중요합니다.</p><div class="tags"><span class="tag-pill">리워드 광고</span><span class="tag-pill">참여형 광고</span><span class="tag-pill">과금 구조</span><span class="tag-pill">제휴 확장</span></div></div></div>
+    <div class="svc-item rv"><div class="svc-idx">03 —</div><div><div class="svc-title">Platform Design</div><div class="svc-sub">서비스와 수익이 함께 작동하는 플랫폼 구조 기획</div><p class="svc-desc">좋은 플랫폼은 사용자 경험과 사업 구조가 동시에 맞물려야 합니다.</p><div class="tags"><span class="tag-pill">서비스 구조</span><span class="tag-pill">MVP 기획</span><span class="tag-pill">사용자 동선</span><span class="tag-pill">API 확장</span></div></div></div>
+    <div class="svc-item rv"><div class="svc-idx">04 —</div><div><div class="svc-title">Partnership Model</div><div class="svc-sub">제휴가 실제 비즈니스가 되도록 연결합니다</div><p class="svc-desc">플랫폼은 혼자 성장하기보다 연결되며 성장합니다.</p><div class="tags"><span class="tag-pill">제휴 구조</span><span class="tag-pill">파트너십</span><span class="tag-pill">공동사업</span><span class="tag-pill">정산 구조</span></div></div></div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- VALUE -->
+  <div id="value">
+    <div class="rv">
+      <div class="ed-tag">Value</div>
+      <h2 class="ed-h">행동과 성과를 연결합니다</h2>
+    </div>
+    <div class="spacer-sm"></div>
+    <div class="val-row rv">
+      <div class="val-i"><div class="num">01</div><h4>참여</h4><p>사용자가 왜 반응하는지 고민합니다.</p></div>
+      <div class="val-i"><div class="num">02</div><h4>전환</h4><p>클릭 이후의 흐름까지 설계합니다.</p></div>
+      <div class="val-i"><div class="num">03</div><h4>확장</h4><p>API, 제휴, 운영 구조를 고려해 확장합니다.</p></div>
+      <div class="val-i"><div class="num">04</div><h4>지속성</h4><p>반복 가능한 수익과 재방문 구조를 지향합니다.</p></div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- PROCESS -->
+  <div id="process">
+    <div class="rv">
+      <div class="ed-tag">How We Work</div>
+      <h2 class="ed-h">이렇게 설계합니다</h2>
+    </div>
+    <div class="spacer-sm"></div>
+    <div class="proc-wrap rv">
+      <div class="proc-i"><div class="proc-n">01</div><div><h4>구조 진단</h4><p>현재 서비스의 유입, 참여, 이탈, 전환 구조를 점검합니다.</p></div></div>
+      <div class="proc-i"><div class="proc-n">02</div><div><h4>보상·광고 메커니즘 설계</h4><p>사용자 행동을 바꾸는 리워드 요소와 광고 접점을 설계합니다.</p></div></div>
+      <div class="proc-i"><div class="proc-n">03</div><div><h4>플랫폼 흐름 정리</h4><p>광고, 리워드, 기능, 정산, 운영이 하나의 흐름으로 이어지도록 설계합니다.</p></div></div>
+      <div class="proc-i"><div class="proc-n">04</div><div><h4>실행 구조 연결</h4><p>파트너십, 연동 구조, 운영 포인트까지 포함해 구체화합니다.</p></div></div>
+      <div class="proc-i"><div class="proc-n">05</div><div><h4>확장 및 고도화</h4><p>전환율, 리텐션, 리워드 효율, 제휴 확장성을 점검합니다.</p></div></div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- PROJECTS -->
+  <div id="projects">
+    <div class="rv">
+      <div class="ed-tag">Projects</div>
+      <h2 class="ed-h">다양한 서비스 구조를 설계해왔습니다</h2>
+    </div>
+    <div class="spacer-sm"></div>
+    <div class="proj-asym rv">
+      <div>
+        <div class="proj-c" style="margin-bottom:16px"><h4>사용자 참여형 리워드 플로우 설계</h4><p>사용자 액션에 따라 보상이 작동하는 참여 흐름을 설계합니다.</p></div>
+        <div class="proj-c"><h4>제휴 기반 확장형 서비스 모델</h4><p>파트너 연동을 전제로 한 운영 구조와 수익 구조를 정리합니다.</p></div>
+      </div>
+      <div>
+        <div class="proj-c" style="margin-bottom:16px"><h4>광고 노출·전환 연동 구조 기획</h4><p>광고 노출 이후 클릭과 전환까지 이어지는 흐름을 함께 설계합니다.</p></div>
+        <div class="proj-c"><h4>MVP 단계 운영·정산 구조 정리</h4><p>초기 실행 가능성과 장기 확장성을 함께 고려한 구조를 설계합니다.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- WHY US -->
+  <div id="whyus">
+    <div class="rv">
+      <div class="ed-tag">Why Eight Floor</div>
+      <h2 class="ed-h">왜 에이트플로어인가</h2>
+    </div>
+    <div class="spacer-sm"></div>
+    <div class="why-cols rv">
+      <div class="why-c"><div class="n">01 —</div><h4>구조 중심 사고</h4><p>우리는 기능보다 흐름을 먼저 봅니다. 서비스가 어떻게 굴러가고, 어디서 수익이 생기며, 어떤 부분에서 막히는지를 구조적으로 분석합니다.</p></div>
+      <div class="why-c"><div class="n">02 —</div><h4>리워드와 광고에 대한 이해</h4><p>리워드는 단순 혜택이 아니고, 광고는 단순 노출이 아닙니다. 두 요소가 결합될 때 어떤 행동 변화가 생기는지 설계합니다.</p></div>
+      <div class="why-c"><div class="n">03 —</div><h4>사업성과 실행 가능성의 균형</h4><p>아이디어를 보기 좋게 포장하는 것이 아니라, 실제 운영 가능한 모델로 정리하는 것을 중요하게 생각합니다.</p></div>
+      <div class="why-c"><div class="n">04 —</div><h4>확장 가능한 플랫폼 관점</h4><p>처음부터 큰 시스템을 만들기보다, MVP에서 시작해 점진적으로 확장 가능한 구조를 설계합니다.</p></div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- VISION -->
+  <div id="vision">
+    <div class="rv">
+      <div class="ed-tag">Vision</div>
+      <h2 class="ed-h">행동을 설계하고, 구조를 만들고,<br>성과로 연결합니다</h2>
+      <div class="vis-quote">
+        기술은 수단일 뿐입니다.<br>
+        중요한 것은 어떤 흐름이 만들어지고,<br>
+        그 흐름이 얼마나 <strong>반복 가능</strong>하며,<br>
+        얼마나 <strong>확장 가능한 비즈니스</strong>로 남는가입니다.
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- CONTACT -->
+  <div class="ct-center" id="contact">
+    <div class="rv">
+      <div class="ed-tag">Contact</div>
+      <h2 class="ed-h">함께 설계할 비즈니스를 찾고 있습니다</h2>
+      <div class="ed-body"><p>리워드 구조가 필요한 서비스, 광고와 사용자 경험을 함께 설계해야 하는 플랫폼이라면 에이트플로어와 이야기를 시작해보세요.</p></div>
+      <div class="ct-btns">
+        <a href="mailto:" class="pill pill-fill">이메일 문의하기</a>
+        <a href="mailto:" class="pill pill-line">사업 제안하기</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+</div>
+
+<footer><p>© 2026 Eight Floor. All rights reserved.</p></footer>
+
+<script>
+var r=document.querySelectorAll('.rv');
+function c(){for(var i=0;i<r.length;i++)if(r[i].getBoundingClientRect().top<window.innerHeight-60)r[i].classList.add('vis');}
+window.addEventListener('scroll',c);window.addEventListener('load',c);
+</script>
+</body>
+</html>
