@@ -3,466 +3,745 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>에이트플로어 — Reward Tech · AdTech · Platform Design</title>
+<title>에이트플로어 — AI 기반 전환 중심 마케팅</title>
+<meta name="description" content="AI 기반 타겟팅과 리워드 구조로 고객 확보 · 참여 · 전환을 설계합니다.">
+<meta property="og:title" content="에이트플로어">
+<meta property="og:description" content="맞춤형 혜택을 제공하는 AI 기반 전환 중심 마케팅">
+<meta name="theme-color" content="#7407ff">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #08090e;
-  --surface: #0f1018;
-  --border: #1c1d2a;
-  --text: #b0b4c8;
-  --text-dim: #5c6080;
-  --heading: #e8eaf0;
-  --accent: #7c9cf8;
-  --accent-dim: rgba(124,156,248,0.1);
+  --primary: #7407ff;
+  --primary-light: #9b4dff;
+  --primary-bg: rgba(116, 7, 255, 0.06);
+  --primary-bg-strong: rgba(116, 7, 255, 0.12);
+  --dark: #1a1a1a;
+  --text: #363636;
+  --text-sub: #666;
+  --text-light: #999;
+  --bg: #ffffff;
+  --bg-gray: #f7f7f8;
+  --bg-dark: #1a1a2e;
+  --border: #e7e7e7;
+  --green: #00d255;
+  --header-h: 70px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'Pretendard', sans-serif;
-  background: var(--bg); color: var(--text);
-  line-height: 1.75; overflow-x: hidden;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text); line-height: 1.7; background: var(--bg);
+  overflow-x: hidden; -webkit-font-smoothing: antialiased;
 }
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
 
-/* NAV */
-nav {
+/* ── HEADER ── */
+.header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  height: 64px; display: flex; align-items: center; justify-content: space-between;
-  padding: 0 clamp(24px, 5vw, 64px);
-  background: rgba(8,9,14,0.9); backdrop-filter: blur(16px);
+  height: var(--header-h); background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s;
 }
-.nav-logo {
-  font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700;
-  color: var(--heading); text-decoration: none;
+.header.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+.header-inner {
+  max-width: 1280px; margin: 0 auto; height: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 65px;
 }
-.nav-logo span { font-weight: 400; color: var(--text-dim); }
-.nav-right { display: flex; align-items: center; gap: 32px; }
-.nav-right a {
-  font-size: 13px; color: var(--text-dim); text-decoration: none; transition: color 0.3s;
+.logo {
+  font-family: 'Poppins', sans-serif; font-size: 18px; font-weight: 700;
+  color: var(--dark); letter-spacing: -0.3px;
 }
-.nav-right a:hover { color: var(--heading); }
-.nav-right .cta {
-  padding: 7px 20px; border: 1px solid var(--border); border-radius: 6px;
-  color: var(--heading) !important; transition: all 0.3s;
+.logo span { color: var(--primary); }
+.nav { display: flex; align-items: center; gap: 0; }
+.nav a {
+  font-family: 'Poppins', 'Pretendard', sans-serif;
+  font-size: 15px; color: #000; padding: 0 18px;
+  height: var(--header-h); display: flex; align-items: center;
+  transition: color 0.25s; position: relative; font-weight: 400;
 }
-.nav-right .cta:hover { background: var(--heading); color: var(--bg) !important; }
-.nav-mobile { display: none; background: none; border: none; color: var(--heading); font-size: 20px; cursor: pointer; }
+.nav a:hover { color: var(--primary); }
+.nav a.active { color: var(--primary); font-weight: 500; }
 
-/* LAYOUT */
-.wrap { max-width: 1100px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 64px); }
-.spacer { height: clamp(100px, 15vh, 160px); }
-.spacer-sm { height: clamp(60px, 8vh, 100px); }
-
-/* HERO */
-.hero {
-  min-height: 100vh; display: flex; align-items: flex-end;
-  padding-bottom: clamp(80px, 12vh, 140px); padding-top: 100px;
+.nav-mobile { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--dark); }
+.mobile-menu {
+  display: none; position: fixed; top: var(--header-h); left: 0; right: 0;
+  background: #fff; border-bottom: 1px solid var(--border);
+  padding: 20px 24px; z-index: 99;
 }
-.hero-inner { width: 100%; }
-.hero-over {
-  font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 500;
-  color: var(--accent); letter-spacing: 5px; text-transform: uppercase;
-  margin-bottom: 28px; opacity: 0; animation: in 0.8s 0.3s forwards;
-}
-.hero-h {
-  font-family: 'Sora', sans-serif;
-  font-size: clamp(32px, 5vw, 64px); font-weight: 800;
-  color: var(--heading); line-height: 1.15; letter-spacing: -1.5px;
-  margin-bottom: 32px; max-width: 820px;
-  opacity: 0; animation: in 0.8s 0.5s forwards;
-}
-.hero-h em { font-style: normal; color: var(--accent); }
-.hero-p {
-  font-size: 17px; font-weight: 300; color: var(--text-dim);
-  line-height: 1.9; max-width: 520px; margin-bottom: 40px;
-  opacity: 0; animation: in 0.8s 0.7s forwards;
-}
-.hero-row {
-  display: flex; gap: 12px;
-  opacity: 0; animation: in 0.8s 0.9s forwards;
-}
-.pill {
-  padding: 12px 28px; border-radius: 6px; font-size: 14px; font-weight: 500;
-  text-decoration: none; transition: all 0.3s; cursor: pointer;
-}
-.pill-fill { background: var(--accent); color: #fff; border: none; }
-.pill-fill:hover { filter: brightness(1.15); transform: translateY(-1px); }
-.pill-line { background: none; color: var(--text); border: 1px solid var(--border); }
-.pill-line:hover { border-color: var(--accent); color: var(--accent); }
-
-/* ABOUT — EDITORIAL SPLIT */
-.ed-split {
-  display: grid; grid-template-columns: 1fr 360px; gap: 80px; align-items: start;
-}
-.ed-tag {
-  font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 500;
-  color: var(--accent); letter-spacing: 4px; text-transform: uppercase;
-  margin-bottom: 16px;
-}
-.ed-h {
-  font-family: 'Sora', sans-serif;
-  font-size: clamp(24px, 3vw, 40px); font-weight: 700;
-  color: var(--heading); line-height: 1.3; letter-spacing: -0.8px;
-  margin-bottom: 24px;
-}
-.ed-body { font-size: 15px; color: var(--text); line-height: 2; }
-.ed-body p { margin-bottom: 16px; }
-
-.info-box {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 28px; margin-top: 8px;
-}
-.info-r {
-  display: flex; justify-content: space-between; padding: 12px 0;
-  border-bottom: 1px solid var(--border); font-size: 13px;
-}
-.info-r:last-child { border-bottom: none; }
-.info-r .l { color: var(--text-dim); }
-.info-r .v { color: var(--heading); font-weight: 500; }
-
-/* TRUST — MONO ROW */
-.mono-row {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
-  border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
-}
-.mono-cell {
-  padding: 36px 24px; border-right: 1px solid var(--border);
-  transition: background 0.3s;
-}
-.mono-cell:last-child { border-right: none; }
-.mono-cell:hover { background: var(--accent-dim); }
-.mono-cell h4 {
-  font-size: 14px; font-weight: 600; color: var(--heading); margin-bottom: 8px;
-}
-.mono-cell p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
-
-/* SERVICES — LIST */
-.svc-item {
-  display: grid; grid-template-columns: 140px 1fr; gap: 40px;
-  padding: 40px 0; border-top: 1px solid var(--border);
-}
-.svc-item:last-child { border-bottom: 1px solid var(--border); }
-.svc-idx {
-  font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 600;
-  color: var(--accent); letter-spacing: 2px;
-}
-.svc-title {
-  font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700;
-  color: var(--heading); margin-bottom: 6px; letter-spacing: -0.3px;
-}
-.svc-sub { font-size: 14px; color: var(--accent); margin-bottom: 14px; }
-.svc-desc { font-size: 14px; color: var(--text-dim); line-height: 1.9; margin-bottom: 14px; }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag-pill {
-  font-size: 11px; padding: 4px 12px; border: 1px solid var(--border);
-  border-radius: 4px; color: var(--text-dim);
-}
-
-/* VALUE — LARGE NUMBERS */
-.val-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
-.val-i { }
-.val-i .num {
-  font-family: 'Sora', sans-serif; font-size: 56px; font-weight: 800;
-  color: var(--border); letter-spacing: -3px; line-height: 1;
-  transition: color 0.4s;
-}
-.val-i:hover .num { color: var(--accent); }
-.val-i h4 { font-size: 15px; font-weight: 600; color: var(--heading); margin: 12px 0 6px; }
-.val-i p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
-
-/* PROCESS */
-.proc-wrap { max-width: 640px; }
-.proc-i {
-  display: flex; gap: 24px; padding: 28px 0;
+.mobile-menu.open { display: block; }
+.mobile-menu a {
+  display: block; padding: 14px 0; font-size: 15px; color: var(--dark);
   border-bottom: 1px solid var(--border);
 }
-.proc-i:last-child { border-bottom: none; }
-.proc-n {
-  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700;
-  color: var(--accent); min-width: 32px; padding-top: 2px;
-}
-.proc-i h4 { font-size: 15px; font-weight: 600; color: var(--heading); margin-bottom: 4px; }
-.proc-i p { font-size: 13px; color: var(--text-dim); line-height: 1.8; }
+.mobile-menu a:last-child { border-bottom: none; }
 
-/* PROJECTS — ASYMMETRIC */
-.proj-asym {
-  display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px;
+/* ── HERO ── */
+.hero {
+  margin-top: var(--header-h);
+  min-height: calc(100vh - var(--header-h));
+  background: linear-gradient(165deg, #1a1a2e 0%, #16162a 40%, #0f0f20 100%);
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; position: relative; overflow: hidden;
 }
-.proj-c {
-  padding: 32px 28px; background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; transition: all 0.3s;
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(116,7,255,0.15) 0%, transparent 70%);
+  animation: heroGlow 4s ease-in-out infinite alternate;
 }
-.proj-c:hover { border-color: rgba(124,156,248,0.25); }
-.proj-c h4 { font-size: 15px; font-weight: 600; color: var(--heading); margin-bottom: 6px; }
-.proj-c p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+@keyframes heroGlow {
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.08); }
+}
+.hero::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+  background: linear-gradient(to top, rgba(15,15,32,0.8), transparent);
+}
+.hero-content { position: relative; z-index: 2; padding: 80px 24px; }
+.hero-label {
+  font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 500;
+  color: rgba(255,255,255,0.7); letter-spacing: 2px; margin-bottom: 16px;
+  opacity: 0; animation: fadeIn 1s 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.hero-h {
+  font-size: clamp(32px, 5vw, 48px); font-weight: 700; color: #fff;
+  line-height: 1.4; margin-bottom: 12px;
+  opacity: 0; animation: fadeInUp 1.1s 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.hero-h strong { font-weight: 800; }
+.hero-sub {
+  font-size: clamp(16px, 2.5vw, 18px); color: rgba(255,255,255,0.65);
+  line-height: 1.8; margin-bottom: 40px;
+  opacity: 0; animation: fadeInUp 1.1s 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.hero-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 36px; background: var(--primary); color: #fff;
+  font-size: 15px; font-weight: 600; border-radius: 6px;
+  border: none; cursor: pointer; transition: all 0.3s;
+  opacity: 0; animation: fadeInScale 1s 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.hero-btn:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(116,7,255,0.3); }
 
-/* WHY */
-.why-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.why-c {
-  padding: 36px 28px; border: 1px solid var(--border); border-radius: 14px;
-  transition: all 0.4s; background: var(--surface);
+/* ── SECTION COMMON ── */
+.section { padding: 100px 0; }
+.section-dark { background: var(--bg-dark); color: #fff; }
+.section-gray { background: var(--bg-gray); }
+.inner { max-width: 1280px; margin: 0 auto; padding: 0 65px; }
+.section-tag {
+  font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 600;
+  color: var(--primary); letter-spacing: 1px; margin-bottom: 12px;
 }
-.why-c:hover { border-color: rgba(124,156,248,0.15); }
-.why-c .n {
-  font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 600;
-  color: var(--accent); letter-spacing: 2px; margin-bottom: 16px;
+.section-title {
+  font-size: clamp(26px, 3.5vw, 36px); font-weight: 700; color: var(--dark);
+  line-height: 1.4; margin-bottom: 16px;
 }
-.why-c h4 { font-size: 16px; font-weight: 700; color: var(--heading); margin-bottom: 10px; }
-.why-c p { font-size: 13px; color: var(--text-dim); line-height: 1.8; }
+.section-dark .section-title { color: #fff; }
+.section-desc {
+  font-size: 16px; color: var(--text-sub); line-height: 1.9; max-width: 560px;
+}
+.section-dark .section-desc { color: rgba(255,255,255,0.6); }
 
-/* VISION — QUOTE */
-.vis-quote {
-  font-family: 'Sora', sans-serif;
-  font-size: clamp(18px, 2.5vw, 28px); font-weight: 300;
-  color: var(--text-dim); line-height: 1.8; max-width: 760px;
-  margin-top: 32px; padding-left: 28px;
-  border-left: 2px solid var(--accent);
+/* ── STATS BAR ── */
+.stats-bar {
+  background: var(--bg-gray); padding: 60px 0;
 }
-.vis-quote strong { color: var(--heading); font-weight: 600; }
+.stats-bar .inner > p {
+  text-align: center; font-size: 14px; font-weight: 600;
+  color: var(--primary); margin-bottom: 8px; letter-spacing: 0.5px;
+}
+.stats-bar h3 {
+  text-align: center; font-size: clamp(22px, 3vw, 30px); font-weight: 700;
+  color: var(--dark); margin-bottom: 48px; line-height: 1.4;
+}
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+  text-align: center;
+}
+.stat-item h4 {
+  font-family: 'Poppins', sans-serif; font-size: clamp(28px, 4vw, 40px);
+  font-weight: 800; color: var(--primary); margin-bottom: 8px;
+  letter-spacing: -1px; transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.stat-item h4.counted { animation: statPop 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes statPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+}
+.stat-item p { font-size: 14px; color: var(--text-sub); font-weight: 500; }
 
-/* CONTACT */
-.ct-center { text-align: center; }
-.ct-center .ed-body { max-width: 500px; margin: 0 auto 36px; text-align: center; }
-.ct-btns { display: flex; gap: 12px; justify-content: center; }
-.ct-block {
-  margin-top: 48px; display: inline-block; text-align: left;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 28px 36px;
+/* ── SERVICES (Expand / Con / Maximize) ── */
+.svc-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  margin-top: 56px;
+}
+.svc-card {
+  background: #fff; border: 1px solid var(--border); border-radius: 16px;
+  padding: 40px 32px; transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1); position: relative; overflow: hidden;
+}
+.svc-card:hover {
+  border-color: var(--primary); box-shadow: 0 20px 60px rgba(116,7,255,0.12);
+  transform: translateY(-8px);
+}
+.svc-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--primary); opacity: 0; transition: opacity 0.35s;
+}
+.svc-card:hover::before { opacity: 1; }
+.svc-keyword {
+  font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 700;
+  color: var(--primary); letter-spacing: 1px; margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.svc-card h3 {
+  font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 12px;
+  line-height: 1.4;
+}
+.svc-card p {
+  font-size: 15px; color: var(--text-sub); line-height: 1.8; margin-bottom: 24px;
+}
+.svc-link {
+  font-size: 14px; font-weight: 600; color: var(--primary);
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: gap 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.svc-link:hover { gap: 12px; transform: translateX(4px); }
+
+/* ── ABOUT ── */
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+  align-items: center; margin-top: 56px;
+}
+.about-text h3 {
+  font-size: clamp(20px, 2.5vw, 28px); font-weight: 700; color: #fff;
+  line-height: 1.5; margin-bottom: 24px;
+}
+.about-text p {
+  font-size: 16px; color: rgba(255,255,255,0.6); line-height: 2;
+  margin-bottom: 16px;
+}
+.about-text .highlight {
+  color: #fff; font-weight: 500;
+}
+.about-text .highlight em {
+  color: var(--primary-light); font-style: normal; font-weight: 700;
+}
+.about-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 15px; font-weight: 600; color: var(--primary-light);
+  margin-top: 20px; transition: gap 0.3s;
+}
+.about-link:hover { gap: 12px; }
+
+.about-visual {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px; padding: 48px 40px; text-align: center;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.about-visual:hover {
+  border-color: rgba(116,7,255,0.3);
+  box-shadow: 0 0 60px rgba(116,7,255,0.08);
+  transform: translateY(-4px);
+}
+.about-visual .big-num {
+  font-family: 'Poppins', sans-serif; font-size: 56px; font-weight: 800;
+  color: var(--primary-light); letter-spacing: -2px; margin-bottom: 4px;
+}
+.about-visual .big-label {
+  font-size: 15px; color: rgba(255,255,255,0.5); margin-bottom: 32px;
+}
+.about-visual .media-stat {
+  padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1);
+}
+.about-visual .media-stat .big-num { font-size: 48px; }
+.about-visual .media-stat p {
+  font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.8; margin-top: 8px;
 }
 
-/* FOOTER */
-footer { padding: 40px; text-align: center; border-top: 1px solid var(--border); margin-top: 40px; }
-footer p { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; }
-
-/* ANIM */
-@keyframes in {
-  from { opacity: 0; transform: translateY(32px); }
-  to { opacity: 1; transform: translateY(0); }
+/* ── SOLUTION ── */
+.solution-intro {
+  max-width: 640px; margin-bottom: 56px;
 }
-.rv {
-  opacity: 0; transform: translateY(28px);
-  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+.solution-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
 }
-.rv.vis { opacity: 1; transform: translateY(0); }
-.rv-d1 { transition-delay: 0.15s; }
+.sol-card {
+  background: #fff; border: 1px solid var(--border); border-radius: 14px;
+  padding: 36px 28px; transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sol-card:hover { border-color: var(--primary); box-shadow: 0 16px 48px rgba(116,7,255,0.1); transform: translateY(-6px); }
+.sol-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: var(--primary-bg); display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px; font-size: 22px;
+}
+.sol-card h4 { font-size: 17px; font-weight: 700; color: var(--dark); margin-bottom: 10px; }
+.sol-card p { font-size: 14px; color: var(--text-sub); line-height: 1.8; }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .ed-split { grid-template-columns: 1fr; gap: 32px; }
-  .mono-row { grid-template-columns: 1fr 1fr; }
-  .mono-cell { border-bottom: 1px solid var(--border); }
-  .svc-item { grid-template-columns: 1fr; gap: 12px; }
-  .val-row { grid-template-columns: 1fr 1fr; }
-  .proj-asym { grid-template-columns: 1fr; }
-  .why-cols { grid-template-columns: 1fr; }
-  .nav-right { display: none; }
+/* ── CONTACT ── */
+.contact-section { padding: 100px 0 120px; }
+.contact-wrap {
+  display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px;
+  align-items: start;
+}
+.contact-left .section-title { margin-bottom: 24px; }
+.contact-left .section-desc { margin-bottom: 40px; }
+.contact-cards { display: flex; flex-direction: column; gap: 16px; }
+.c-card {
+  padding: 24px; background: var(--bg-gray); border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.c-card h4 { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.c-card p { font-size: 14px; color: var(--text-sub); line-height: 1.7; }
+
+.contact-form { display: flex; flex-direction: column; gap: 16px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 13px; font-weight: 600; color: var(--text); }
+.form-group select,
+.form-group input,
+.form-group textarea {
+  padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px;
+  font-size: 14px; font-family: 'Pretendard', sans-serif; color: var(--text);
+  background: #fff; transition: border-color 0.25s; outline: none;
+}
+.form-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus { border-color: var(--primary); }
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-group select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23999'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+.form-check { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.form-check input[type="checkbox"] { accent-color: var(--primary); width: 16px; height: 16px; }
+.form-check label { font-size: 13px; color: var(--text-sub); cursor: pointer; }
+.submit-btn {
+  padding: 14px 40px; background: var(--primary); color: #fff;
+  font-size: 15px; font-weight: 600; border: none; border-radius: 8px;
+  cursor: pointer; transition: all 0.3s; align-self: flex-start;
+}
+.submit-btn:hover { background: var(--primary-light); transform: translateY(-1px); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--dark); color: rgba(255,255,255,0.45);
+  padding: 48px 0; font-size: 13px;
+}
+.footer-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 65px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-logo {
+  font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 700;
+  color: rgba(255,255,255,0.8); margin-bottom: 12px;
+}
+.footer-info { line-height: 1.9; }
+.footer-right { text-align: right; line-height: 1.9; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn { 
+  from { opacity: 0; filter: blur(8px); } 
+  to { opacity: 1; filter: blur(0); } 
+}
+@keyframes fadeInUp { 
+  from { opacity: 0; transform: translateY(50px); filter: blur(6px); } 
+  to { opacity: 1; transform: translateY(0); filter: blur(0); } 
+}
+@keyframes fadeInScale {
+  from { opacity: 0; transform: translateY(60px) scale(0.95); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+.reveal {
+  opacity: 0; transform: translateY(60px) scale(0.97);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), 
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: blur(4px);
+}
+.reveal.visible { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+.reveal-d1 { transition-delay: 0.15s; }
+.reveal-d2 { transition-delay: 0.3s; }
+.reveal-d3 { transition-delay: 0.45s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .inner { padding: 0 32px; }
+  .header-inner { padding: 0 24px; }
+  .svc-grid { grid-template-columns: 1fr; gap: 16px; }
+  .about-grid { grid-template-columns: 1fr; gap: 48px; }
+  .contact-wrap { grid-template-columns: 1fr; gap: 48px; }
+  .solution-grid { grid-template-columns: 1fr 1fr; }
+  .footer-inner { padding: 0 32px; flex-direction: column; gap: 24px; text-align: center; }
+  .footer-right { text-align: center; }
+}
+@media (max-width: 768px) {
+  :root { --header-h: 56px; }
+  .inner { padding: 0 24px; }
+  .section { padding: 72px 0; }
+  .nav { display: none; }
   .nav-mobile { display: block; }
-  .hero-row, .ct-btns { flex-direction: column; }
-  .hero-row a, .ct-btns a { text-align: center; }
-}
-@media (max-width: 600px) {
-  .mono-row, .val-row { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .solution-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .hero-content { padding: 60px 20px; }
+  .stats-bar { padding: 48px 0; }
+  .stats-bar h3 { margin-bottom: 36px; }
+  .about-visual { padding: 36px 28px; }
 }
 </style>
 </head>
 <body>
 
-<nav>
-  <a href="#" class="nav-logo">eightfloor<span>.co</span></a>
-  <div class="nav-right">
-    <a href="#about">About</a>
-    <a href="#services">Services</a>
-    <a href="#process">Process</a>
-    <a href="#contact" class="cta">Contact</a>
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="header-inner">
+    <a href="#" class="logo">에이트플로어</a>
+    <nav class="nav">
+      <a href="#about">ABOUT</a>
+      <a href="#services">STRATEGY</a>
+      <a href="#solution">SOLUTION</a>
+      <a href="#performance">PERFORMANCE</a>
+      <a href="#contact">CONTACT</a>
+    </nav>
+    <button class="nav-mobile" id="navToggle" aria-label="메뉴">☰</button>
   </div>
-  <button class="nav-mobile" onclick="document.querySelector('.nav-right').classList.toggle('show')">☰</button>
-</nav>
-
-<!-- HERO -->
-<div class="wrap">
-  <div class="hero">
-    <div class="hero-inner">
-      <div class="hero-over">Reward Tech · AdTech · Platform Design</div>
-      <h1 class="hero-h">리워드와 광고,<br>사용자 행동을 <em>연결하는<br>플랫폼 설계</em> 회사</h1>
-      <p class="hero-p">유저 유입부터 참여, 전환, 보상, 재방문까지 이어지는 흐름 전체를 설계합니다. 단순한 광고 운영이 아니라 구조를 만듭니다.</p>
-      <div class="hero-row">
-        <a href="#about" class="pill pill-line">회사 소개 보기</a>
-        <a href="#contact" class="pill pill-fill">사업 문의하기</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <!-- ABOUT -->
-  <div id="about">
-    <div class="ed-split rv">
-      <div>
-        <div class="ed-tag">About</div>
-        <h2 class="ed-h">광고가 작동하는 구조를<br>설계합니다</h2>
-        <div class="ed-body">
-          <p>광고는 더 이상 노출만으로 끝나지 않습니다. 사용자는 왜 클릭하는지, 무엇에 반응하는지, 어떤 보상이 행동을 바꾸는지가 더 중요해졌습니다.</p>
-          <p>에이트플로어는 이 흐름을 캠페인 단위가 아니라 플랫폼 구조와 수익 모델의 관점에서 설계합니다. 리워드 기반 참여 구조, 광고 연동 방식, API 기반 확장, 제휴 모델 설계까지 실행 가능한 형태로 정리하는 것이 우리의 역할입니다.</p>
-        </div>
-      </div>
-      <div class="info-box rv-d1">
-        <div class="info-r"><span class="l">회사명</span><span class="v">에이트플로어</span></div>
-        <div class="info-r"><span class="l">주요 사업</span><span class="v">리워드 테크 / 애드테크 / 플랫폼 설계</span></div>
-        <div class="info-r"><span class="l">대표</span><span class="v">—</span></div>
-        <div class="info-r"><span class="l">설립연도</span><span class="v">—</span></div>
-        <div class="info-r"><span class="l">본사</span><span class="v">—</span></div>
-        <div class="info-r"><span class="l">이메일</span><span class="v">—</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <!-- TRUST -->
-  <div id="trust">
-    <div class="rv">
-      <div class="ed-tag">Core Strengths</div>
-      <h2 class="ed-h">기능보다 흐름을 먼저 봅니다</h2>
-    </div>
-    <div class="spacer-sm"></div>
-    <div class="mono-row rv">
-      <div class="mono-cell"><h4>구조 중심 설계</h4><p>기능 나열보다 서비스가 실제로 어떻게 작동하는지 먼저 봅니다.</p></div>
-      <div class="mono-cell"><h4>통합 관점</h4><p>광고와 보상, 사용자 경험과 수익 구조를 따로 보지 않습니다.</p></div>
-      <div class="mono-cell"><h4>실행 가능한 모델</h4><p>좋아 보이는 아이디어보다 실제 운영 가능한 구조를 중요하게 생각합니다.</p></div>
-      <div class="mono-cell"><h4>MVP → 확장</h4><p>초기 실행과 장기 확장을 분리하지 않고 함께 설계합니다.</p></div>
-    </div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <!-- SERVICES -->
-  <div id="services">
-    <div class="rv">
-      <div class="ed-tag">Services</div>
-      <h2 class="ed-h">사업 영역</h2>
-    </div>
-    <div class="spacer-sm"></div>
-    <div class="svc-item rv"><div class="svc-idx">01 —</div><div><div class="svc-title">Reward Tech</div><div class="svc-sub">사용자의 행동을 유도하는 보상 구조 설계</div><p class="svc-desc">리워드는 단순한 혜택 제공이 아니라, 서비스 안에서 사용자의 행동을 설계하는 중요한 장치입니다.</p><div class="tags"><span class="tag-pill">캠페인 구조</span><span class="tag-pill">보상 정책</span><span class="tag-pill">액션 기반 플로우</span><span class="tag-pill">성과 연동</span></div></div></div>
-    <div class="svc-item rv"><div class="svc-idx">02 —</div><div><div class="svc-title">AdTech</div><div class="svc-sub">광고가 실제 성과로 이어지는 구조 설계</div><p class="svc-desc">광고는 많이 보여주는 것이 아니라 잘 반응하게 만드는 것이 중요합니다.</p><div class="tags"><span class="tag-pill">리워드 광고</span><span class="tag-pill">참여형 광고</span><span class="tag-pill">과금 구조</span><span class="tag-pill">제휴 확장</span></div></div></div>
-    <div class="svc-item rv"><div class="svc-idx">03 —</div><div><div class="svc-title">Platform Design</div><div class="svc-sub">서비스와 수익이 함께 작동하는 플랫폼 구조 기획</div><p class="svc-desc">좋은 플랫폼은 사용자 경험과 사업 구조가 동시에 맞물려야 합니다.</p><div class="tags"><span class="tag-pill">서비스 구조</span><span class="tag-pill">MVP 기획</span><span class="tag-pill">사용자 동선</span><span class="tag-pill">API 확장</span></div></div></div>
-    <div class="svc-item rv"><div class="svc-idx">04 —</div><div><div class="svc-title">Partnership Model</div><div class="svc-sub">제휴가 실제 비즈니스가 되도록 연결합니다</div><p class="svc-desc">플랫폼은 혼자 성장하기보다 연결되며 성장합니다.</p><div class="tags"><span class="tag-pill">제휴 구조</span><span class="tag-pill">파트너십</span><span class="tag-pill">공동사업</span><span class="tag-pill">정산 구조</span></div></div></div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <!-- VALUE -->
-  <div id="value">
-    <div class="rv">
-      <div class="ed-tag">Value</div>
-      <h2 class="ed-h">행동과 성과를 연결합니다</h2>
-    </div>
-    <div class="spacer-sm"></div>
-    <div class="val-row rv">
-      <div class="val-i"><div class="num">01</div><h4>참여</h4><p>사용자가 왜 반응하는지 고민합니다.</p></div>
-      <div class="val-i"><div class="num">02</div><h4>전환</h4><p>클릭 이후의 흐름까지 설계합니다.</p></div>
-      <div class="val-i"><div class="num">03</div><h4>확장</h4><p>API, 제휴, 운영 구조를 고려해 확장합니다.</p></div>
-      <div class="val-i"><div class="num">04</div><h4>지속성</h4><p>반복 가능한 수익과 재방문 구조를 지향합니다.</p></div>
-    </div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <!-- PROCESS -->
-  <div id="process">
-    <div class="rv">
-      <div class="ed-tag">How We Work</div>
-      <h2 class="ed-h">이렇게 설계합니다</h2>
-    </div>
-    <div class="spacer-sm"></div>
-    <div class="proc-wrap rv">
-      <div class="proc-i"><div class="proc-n">01</div><div><h4>구조 진단</h4><p>현재 서비스의 유입, 참여, 이탈, 전환 구조를 점검합니다.</p></div></div>
-      <div class="proc-i"><div class="proc-n">02</div><div><h4>보상·광고 메커니즘 설계</h4><p>사용자 행동을 바꾸는 리워드 요소와 광고 접점을 설계합니다.</p></div></div>
-      <div class="proc-i"><div class="proc-n">03</div><div><h4>플랫폼 흐름 정리</h4><p>광고, 리워드, 기능, 정산, 운영이 하나의 흐름으로 이어지도록 설계합니다.</p></div></div>
-      <div class="proc-i"><div class="proc-n">04</div><div><h4>실행 구조 연결</h4><p>파트너십, 연동 구조, 운영 포인트까지 포함해 구체화합니다.</p></div></div>
-      <div class="proc-i"><div class="proc-n">05</div><div><h4>확장 및 고도화</h4><p>전환율, 리텐션, 리워드 효율, 제휴 확장성을 점검합니다.</p></div></div>
-    </div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <!-- PROJECTS -->
-  <div id="projects">
-    <div class="rv">
-      <div class="ed-tag">Projects</div>
-      <h2 class="ed-h">다양한 서비스 구조를 설계해왔습니다</h2>
-    </div>
-    <div class="spacer-sm"></div>
-    <div class="proj-asym rv">
-      <div>
-        <div class="proj-c" style="margin-bottom:16px"><h4>사용자 참여형 리워드 플로우 설계</h4><p>사용자 액션에 따라 보상이 작동하는 참여 흐름을 설계합니다.</p></div>
-        <div class="proj-c"><h4>제휴 기반 확장형 서비스 모델</h4><p>파트너 연동을 전제로 한 운영 구조와 수익 구조를 정리합니다.</p></div>
-      </div>
-      <div>
-        <div class="proj-c" style="margin-bottom:16px"><h4>광고 노출·전환 연동 구조 기획</h4><p>광고 노출 이후 클릭과 전환까지 이어지는 흐름을 함께 설계합니다.</p></div>
-        <div class="proj-c"><h4>MVP 단계 운영·정산 구조 정리</h4><p>초기 실행 가능성과 장기 확장성을 함께 고려한 구조를 설계합니다.</p></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <!-- WHY US -->
-  <div id="whyus">
-    <div class="rv">
-      <div class="ed-tag">Why Eight Floor</div>
-      <h2 class="ed-h">왜 에이트플로어인가</h2>
-    </div>
-    <div class="spacer-sm"></div>
-    <div class="why-cols rv">
-      <div class="why-c"><div class="n">01 —</div><h4>구조 중심 사고</h4><p>우리는 기능보다 흐름을 먼저 봅니다. 서비스가 어떻게 굴러가고, 어디서 수익이 생기며, 어떤 부분에서 막히는지를 구조적으로 분석합니다.</p></div>
-      <div class="why-c"><div class="n">02 —</div><h4>리워드와 광고에 대한 이해</h4><p>리워드는 단순 혜택이 아니고, 광고는 단순 노출이 아닙니다. 두 요소가 결합될 때 어떤 행동 변화가 생기는지 설계합니다.</p></div>
-      <div class="why-c"><div class="n">03 —</div><h4>사업성과 실행 가능성의 균형</h4><p>아이디어를 보기 좋게 포장하는 것이 아니라, 실제 운영 가능한 모델로 정리하는 것을 중요하게 생각합니다.</p></div>
-      <div class="why-c"><div class="n">04 —</div><h4>확장 가능한 플랫폼 관점</h4><p>처음부터 큰 시스템을 만들기보다, MVP에서 시작해 점진적으로 확장 가능한 구조를 설계합니다.</p></div>
-    </div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <!-- VISION -->
-  <div id="vision">
-    <div class="rv">
-      <div class="ed-tag">Vision</div>
-      <h2 class="ed-h">행동을 설계하고, 구조를 만들고,<br>성과로 연결합니다</h2>
-      <div class="vis-quote">
-        기술은 수단일 뿐입니다.<br>
-        중요한 것은 어떤 흐름이 만들어지고,<br>
-        그 흐름이 얼마나 <strong>반복 가능</strong>하며,<br>
-        얼마나 <strong>확장 가능한 비즈니스</strong>로 남는가입니다.
-      </div>
-    </div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <!-- CONTACT -->
-  <div class="ct-center" id="contact">
-    <div class="rv">
-      <div class="ed-tag">Contact</div>
-      <h2 class="ed-h">함께 설계할 비즈니스를 찾고 있습니다</h2>
-      <div class="ed-body"><p>리워드 구조가 필요한 서비스, 광고와 사용자 경험을 함께 설계해야 하는 플랫폼이라면 에이트플로어와 이야기를 시작해보세요.</p></div>
-      <div class="ct-btns">
-        <a href="mailto:" class="pill pill-fill">이메일 문의하기</a>
-        <a href="mailto:" class="pill pill-line">사업 제안하기</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="spacer"></div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobile()">ABOUT</a>
+  <a href="#services" onclick="closeMobile()">STRATEGY</a>
+  <a href="#solution" onclick="closeMobile()">SOLUTION</a>
+  <a href="#performance" onclick="closeMobile()">PERFORMANCE</a>
+  <a href="#contact" onclick="closeMobile()">CONTACT</a>
 </div>
 
-<footer><p>© 2026 Eight Floor. All rights reserved.</p></footer>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <p class="hero-label">EIGHT FLOOR</p>
+    <h1 class="hero-h">맞춤형 혜택을 제공하는<br><strong>AI 기반 전환 중심 마케팅</strong></h1>
+    <p class="hero-sub">AI가 사용자 반응을 분석하고, 가장 효과적인 광고를 매칭합니다.<br>리워드 기반 참여 구조로 고객 확보 · 전환 · 수익화를 실현합니다.</p>
+    <a href="#contact" class="hero-btn">사업 문의하기 →</a>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="inner">
+    <p class="reveal">성공적인 브랜드는 모두 에이트플로어와 함께</p>
+    <h3 class="reveal">빠르게 성장하는 브랜드의 선택,<br>에이트플로어와 함께하세요</h3>
+    <div class="stats-row">
+      <div class="stat-item reveal reveal-d1">
+        <h4 data-count="9000">0</h4>
+        <p>누적 광고주</p>
+      </div>
+      <div class="stat-item reveal reveal-d1">
+        <h4 data-count="370" data-suffix="+">0</h4>
+        <p>제휴 앱 매체</p>
+      </div>
+      <div class="stat-item reveal reveal-d2">
+        <h4 data-count="95" data-suffix="%">0</h4>
+        <p>광고 리텐션율</p>
+      </div>
+      <div class="stat-item reveal reveal-d3">
+        <h4 data-count="150" data-prefix="" data-suffix="억+">0</h4>
+        <p>월간 광고 노출</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="inner">
+    <div class="reveal">
+      <p class="section-tag">STRATEGY</p>
+      <h2 class="section-title">비즈니스를 성장시키는 세 가지 전략</h2>
+      <p class="section-desc">에이트플로어는 고객 확보부터 참여, 수익화까지 전 과정을 설계합니다.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card reveal reveal-d1">
+        <p class="svc-keyword">Expand</p>
+        <h3>우리 브랜드, 더 많은 고객에게<br>효과적으로 알릴 수 없을까?</h3>
+        <p>리워드 광고 네트워크를 통해 370개 이상의 프리미엄 앱에서 동시에 브랜드를 노출합니다. 포인트·금융·생활 앱을 아우르는 확장성으로 도달 범위를 극대화합니다.</p>
+        <a href="#contact" class="svc-link">더 알아보기 →</a>
+      </div>
+      <div class="svc-card reveal reveal-d2">
+        <p class="svc-keyword">Connect</p>
+        <h3>사용자가 우리 서비스를<br>더 자주 찾을 수 없을까?</h3>
+        <p>행동 기반 보상 설계로 사용자의 참여를 유도합니다. 단순 혜택이 아닌, 서비스 안에서 자연스럽게 반복 방문을 만드는 리워드 구조를 설계합니다.</p>
+        <a href="#contact" class="svc-link">더 알아보기 →</a>
+      </div>
+      <div class="svc-card reveal reveal-d3">
+        <p class="svc-keyword">Maximize</p>
+        <h3>많은 유저가 방문하는 우리 앱,<br>어떻게 수익을 극대화할까?</h3>
+        <p>트래픽을 수익으로 전환하는 광고 연동 구조를 제공합니다. 사용자 경험을 해치지 않으면서 광고 매출을 최적화하는 과금 모델을 설계합니다.</p>
+        <a href="#contact" class="svc-link">더 알아보기 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section section-dark" id="about">
+  <div class="inner">
+    <div class="reveal">
+      <p class="section-tag">ABOUT</p>
+      <h2 class="section-title">AI와 리워드로 광고 성과를 설계하는 회사,<br>에이트플로어입니다</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <h3>AI 타겟팅과 리워드 구조를 하나로 연결하는<br>풀퍼널 마케팅 솔루션</h3>
+        <p>에이트플로어는 AI 기반 사용자 반응 분석으로 <span class="highlight"><em>광고와 사용자를 정밀하게 매칭</em></span>합니다.</p>
+        <p>단순 노출이 아니라, 누가·언제·어떤 광고에 반응하는지를 분석하고 <span class="highlight"><em>전환 확률이 높은 조합</em></span>을 자동으로 찾아갑니다.</p>
+        <p>유저 유입부터 참여, 전환, 보상, 재방문까지 이어지는 흐름 전체를 설계합니다. 단순한 광고 운영이 아니라 구조를 만듭니다.</p>
+        <a href="#contact" class="about-link">더 알아보기 →</a>
+      </div>
+      <div class="about-visual reveal reveal-d2">
+        <div class="big-num">9,000<span style="font-size:36px">+</span></div>
+        <p class="big-label">에이트플로어 누적 광고주</p>
+        <div class="media-stat">
+          <div class="big-num">370<span style="font-size:32px">+</span></div>
+          <p>프리미엄 매체에 동시 광고<br>포인트 · 금융 · 생활 앱 동시 집행</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="section section-gray" id="solution">
+  <div class="inner">
+    <div class="solution-intro reveal">
+      <p class="section-tag">SOLUTION</p>
+      <h2 class="section-title">광고주와 제휴사를 위한<br>맞춤 실행 전략을 제공합니다</h2>
+      <p class="section-desc">브랜드와 서비스의 상황에 맞춰<br>광고 집행 구조, 매체 운영 방식, 제휴 연동 흐름을 함께 설계합니다.</p>
+    </div>
+    <div class="solution-grid">
+      <div class="sol-card reveal reveal-d1">
+        <div class="sol-icon">📊</div>
+        <h4>광고주를 위한 맞춤 매체 설명 자료 제공</h4>
+        <p>브랜드 특성에 맞는 매체 추천과 캠페인 구조를 설명하는 맞춤 자료를 제공합니다.</p>
+      </div>
+      <div class="sol-card reveal reveal-d2">
+        <div class="sol-icon">⚙️</div>
+        <h4>제휴사를 위한 기술 가이드 및 지면 최적화 설계 지원</h4>
+        <p>앱 내 광고 지면 배치, SDK 연동, 최적화 가이드를 통해 수익을 극대화합니다.</p>
+      </div>
+      <div class="sol-card reveal reveal-d3">
+        <div class="sol-icon">🎯</div>
+        <h4>브랜드를 위한 맞춤형 데모 서비스 및 마케팅 컨설팅 제공</h4>
+        <p>실제 캠페인 시뮬레이션과 성과 예측을 통해 최적의 집행 전략을 수립합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERFORMANCE -->
+<section class="section" id="performance">
+  <div class="inner" style="text-align:center;">
+    <div class="reveal">
+      <p class="section-tag">PERFORMANCE</p>
+      <h2 class="section-title" style="margin-left:auto;margin-right:auto;">한 번의 광고로 370개 플랫폼에서<br>동시에 노출되는 강력한 확장성</h2>
+      <p class="section-desc" style="margin-left:auto;margin-right:auto;">포인트 · 금융 · 생활 앱 동시 집행으로<br>더 넓은 광고 도달을 실현합니다.</p>
+    </div>
+    <div class="stats-row" style="margin-top:56px;">
+      <div class="stat-item reveal reveal-d1">
+        <h4 style="color:var(--dark);">CPA</h4>
+        <p>성과 기반 과금</p>
+      </div>
+      <div class="stat-item reveal reveal-d1">
+        <h4 style="color:var(--dark);">CPI</h4>
+        <p>설치 기반 과금</p>
+      </div>
+      <div class="stat-item reveal reveal-d2">
+        <h4 style="color:var(--dark);">CPE</h4>
+        <p>참여 기반 과금</p>
+      </div>
+      <div class="stat-item reveal reveal-d3">
+        <h4 style="color:var(--dark);">ROAS</h4>
+        <p>광고 수익률 최적화</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section section-gray contact-section" id="contact">
+  <div class="inner">
+    <div class="contact-wrap">
+      <div class="contact-left reveal">
+        <p class="section-tag">CONTACT</p>
+        <h2 class="section-title">지금 바로<br>문의하세요</h2>
+        <p class="section-desc">리워드 광고, 제휴 매체, 마케팅 컨설팅 등<br>비즈니스 성장에 필요한 모든 것을 상담해드립니다.</p>
+        <div class="contact-cards">
+          <div class="c-card">
+            <h4>광고주 문의</h4>
+            <p>타사 앱에 우리 브랜드 광고를 노출하고 싶어요.</p>
+          </div>
+          <div class="c-card">
+            <h4>제휴사 문의</h4>
+            <p>우리 앱에 타사 브랜드 광고를 노출시키고 싶어요.</p>
+          </div>
+          <div class="c-card">
+            <h4>마케팅 컨설팅</h4>
+            <p>CRM 마케팅, 네이버 광고 등을 시작하고 싶어요.</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form reveal reveal-d2">
+        <div class="form-row">
+          <div class="form-group">
+            <label>문의 구분</label>
+            <select>
+              <option value="">선택해주세요</option>
+              <option>타사 앱에 우리 브랜드 광고를 노출하고 싶어요</option>
+              <option>우리 앱에 타사 브랜드 광고를 노출시키고 싶어요</option>
+              <option>네이버 플레이스/스마트스토어 광고를 집행하고 싶어요</option>
+              <option>CRM마케팅을 시작하고 싶어요</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>회사 유형</label>
+            <select>
+              <option value="">선택해주세요</option>
+              <option>브랜드(인하우스)</option>
+              <option>대행사</option>
+              <option>앱서비스</option>
+              <option>웹서비스 혹은 앱/웹 동시 운영</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>업종</label>
+          <select>
+            <option value="">선택해주세요</option>
+            <option>소비재</option><option>식음료</option><option>패션/키즈</option>
+            <option>O2O</option><option>전자제품</option><option>커머스(온라인채널)</option>
+            <option>금융/카드</option><option>금융/은행</option><option>교육/도서</option>
+            <option>여행/레저/숙박</option><option>의료/건강</option><option>모바일/컨텐츠</option>
+            <option>부동산/건설</option><option>프랜차이즈</option><option>기타</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>회사 이름</label>
+            <input type="text" placeholder="회사명을 입력해주세요">
+          </div>
+          <div class="form-group">
+            <label>이메일</label>
+            <input type="email" placeholder="이메일을 입력해주세요">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>전화번호</label>
+          <input type="tel" placeholder="전화번호를 입력해주세요">
+        </div>
+        <div class="form-group">
+          <label>문의 내용</label>
+          <textarea placeholder="문의 내용을 자유롭게 작성해주세요"></textarea>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="privacy">
+          <label for="privacy">개인정보 수집 및 이용에 동의합니다.</label>
+        </div>
+        <button type="button" class="submit-btn">문의하기 →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">EIGHT FLOOR</div>
+      <div class="footer-info">
+        서울특별시 강남구 도산대로 4길 13, 3층 (논현동)<br>
+        Tel. 1855-1640 &nbsp;|&nbsp; Fax. 02-6935-1640
+      </div>
+    </div>
+    <div class="footer-right">
+      Copyright © 2019 에이트플로어 All rights reserved.
+    </div>
+  </div>
+</footer>
 
 <script>
-var r=document.querySelectorAll('.rv');
-function c(){for(var i=0;i<r.length;i++)if(r[i].getBoundingClientRect().top<window.innerHeight-60)r[i].classList.add('vis');}
-window.addEventListener('scroll',c);window.addEventListener('load',c);
+// Header scroll
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 10);
+});
+
+// Mobile menu
+const navToggle = document.getElementById('navToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+navToggle.addEventListener('click', () => {
+  mobileMenu.classList.toggle('open');
+  navToggle.textContent = mobileMenu.classList.contains('open') ? '✕' : '☰';
+});
+function closeMobile() {
+  mobileMenu.classList.remove('open');
+  navToggle.textContent = '☰';
+}
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+function checkReveal() {
+  for (const el of reveals) {
+    if (el.getBoundingClientRect().top < window.innerHeight - 60) {
+      el.classList.add('visible');
+    }
+  }
+}
+window.addEventListener('scroll', checkReveal);
+window.addEventListener('load', checkReveal);
+
+// Counter animation
+const counters = document.querySelectorAll('[data-count]');
+const observed = new Set();
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !observed.has(entry.target)) {
+      observed.add(entry.target);
+      const el = entry.target;
+      const target = parseInt(el.dataset.count);
+      const suffix = el.dataset.suffix || '';
+      const prefix = el.dataset.prefix || '';
+      const duration = 1800;
+      const start = performance.now();
+      function update(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(ease * target);
+        el.textContent = prefix + current.toLocaleString() + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+        else el.classList.add('counted');
+      }
+      requestAnimationFrame(update);
+    }
+  });
+}, { threshold: 0.3 });
+counters.forEach(c => counterObserver.observe(c));
+
+// Active nav on scroll
+const sections = document.querySelectorAll('section[id], .stats-bar');
+const navLinks = document.querySelectorAll('.nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (s.id && window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
 </script>
 </body>
 </html>
